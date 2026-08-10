@@ -1,9 +1,10 @@
 services:
   - type: web
     name: weave-plus-app
-    runtime: docker
-    dockerfilePath: ./Dockerfile
+    runtime: node
     plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
     envVars:
-      - key: ASPNETCORE_ENVIRONMENT
-        value: Production
+      - key: NODE_VERSION
+        value: 24.14.1
