@@ -233,8 +233,8 @@ export function GraphView({
           }
         }
 
-        ctx.lineWidth = 1 / view.k;
-        ctx.strokeStyle = `rgba(${palette.link},${theme === "light" ? 0.16 : 0.09})`;
+        ctx.lineWidth = 1.2 / view.k;
+        ctx.strokeStyle = `rgba(${palette.link},${theme === "light" ? 0.45 : 0.35})`;
         ctx.beginPath();
         for (let e = 0; e < edges.length; e += 1) {
           const [ai, bi] = edges[e]!;
