@@ -48,7 +48,11 @@ and fill in what you use:
 
 ## Deploy
 
-The default production build targets Cloudflare Workers (Nitro's `cloudflare-module` preset, wired via `@lovable.dev/vite-tanstack-config`) — that's the toolchain this app was built for, and the one that's actually verified working. A Node-server build was tried for Render and hit an upstream bundling bug in this Vite 8 / Nitro 3 beta combination (a `createCsrfMiddleware` import breaks under Node-target chunking but not under the Cloudflare target), so hosting here means Cloudflare Pages/Workers rather than a plain Node host.
+Live at https://ragazabrian-weave-plus-app.ragazabrian-8fa.workers.dev, deployed to Cloudflare Workers (Nitro's `cloudflare-module` preset, wired via `@lovable.dev/vite-tanstack-config`) via `wrangler deploy`.
+
+This pins `vite` to `7.3.6` rather than the `^8` the export shipped with. Vite 8 production builds (both the Cloudflare and a Node-server target) hit a real bug: two generated SSR chunks import from each other, and `createCsrfMiddleware` comes back `undefined` across that circular boundary — `npm run dev` was unaffected since dev mode doesn't go through this bundling path. None of this project's declared dependencies (`@tanstack/react-start`, `@tailwindcss/vite`) list Vite 8 as supported yet, so 7.x is the correct fix, not a workaround.
+
+Required secrets are set directly on the Worker (`wrangler secret put`), not in this repo: `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`. The AI agent and Google integrations need their own vars added the same way before those features work — see the table above.
 
 ## Project structure
 
