@@ -1,0 +1,469 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+@import "@fontsource-variable/dm-sans";
+@import "@fontsource-variable/geist";
+
+/*
+ * weave+ design system.
+ * Two themes share one token set: values live on :root (dark) and are
+ * overridden under .light. Every palette token is exposed through
+ * @theme inline so utilities resolve at runtime and flip with the theme.
+ * Weight 500 is the ceiling. Depth comes from translucency and glow, not
+ * from drop shadows, and accents glow rather than fill with gradients.
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* Core palette */
+  --p-void-canvas: #0a0a0a;
+  --p-graphite-surface: #161616;
+  --p-frosted-glass: #d4d4d4;
+  --p-ink-black: #000000;
+  --p-snow-white: #ffffff;
+  --p-bone: #ededed;
+  --p-ash: #c2c2c2;
+  --p-slate: #686868;
+  --p-smoke: #b2b2b2;
+  --p-hairline: #e5e5e5;
+  --p-dusk-violet: #6b62f2;
+  /* Always-white text for violet fills, both themes */
+  --p-on-violet: #ffffff;
+
+  /* Elevation washes */
+  --p-elev-1: #191919;
+  --p-elev-2: #1c1c1c;
+  --p-elev-3: #1f1f1f;
+
+  /* Translucency scheme */
+  --hairline-color: rgba(255, 255, 255, 0.1);
+  --frost-fill: rgba(212, 212, 212, 0.06);
+  --frost-fill-strong: rgba(212, 212, 212, 0.1);
+  --frost-ring: rgba(255, 255, 255, 0.08);
+}
+
+.light {
+  color-scheme: light;
+
+  --p-void-canvas: #f4f4f5;
+  --p-graphite-surface: #ffffff;
+  --p-frosted-glass: #ffffff;
+  --p-ink-black: #ffffff;
+  --p-snow-white: #0b0b0c;
+  --p-bone: #18181b;
+  --p-ash: #3f3f46;
+  --p-slate: #71717a;
+  --p-smoke: #52525b;
+  --p-hairline: #d4d4d8;
+  --p-dusk-violet: #574fd6;
+  --p-on-violet: #ffffff;
+
+  --p-elev-1: #fafafa;
+  --p-elev-2: #f4f4f5;
+  --p-elev-3: #ebebed;
+
+  --hairline-color: rgba(9, 9, 11, 0.12);
+  --frost-fill: rgba(255, 255, 255, 0.72);
+  --frost-fill-strong: rgba(255, 255, 255, 0.88);
+  --frost-ring: rgba(9, 9, 11, 0.08);
+}
+
+@theme inline {
+  /* Core palette */
+  --color-void-canvas: var(--p-void-canvas);
+  --color-graphite-surface: var(--p-graphite-surface);
+  --color-frosted-glass: var(--p-frosted-glass);
+  --color-ink-black: var(--p-ink-black);
+  --color-snow-white: var(--p-snow-white);
+  --color-bone: var(--p-bone);
+  --color-ash: var(--p-ash);
+  --color-slate: var(--p-slate);
+  --color-smoke: var(--p-smoke);
+  --color-hairline: var(--p-hairline);
+  --color-dusk-violet: var(--p-dusk-violet);
+  --color-on-violet: var(--p-on-violet);
+
+  /* Legacy aliases: older screens resolve through these */
+  --color-cosmic: var(--p-void-canvas);
+  --color-sky-tint: var(--p-void-canvas);
+  --color-void: var(--p-ink-black);
+  --color-snow: var(--p-snow-white);
+  --color-paper-white: var(--p-snow-white);
+  --color-bone-white: var(--p-graphite-surface);
+  --color-not-quite-black: var(--p-graphite-surface);
+  --color-dark-charcoal: var(--p-elev-3);
+  --color-mist-gray: var(--p-elev-3);
+  --color-off-white: var(--p-bone);
+  --color-ink: var(--p-snow-white);
+  --color-graphite: var(--p-ash);
+  --color-fog: var(--p-slate);
+  --color-greyple: var(--p-smoke);
+  --color-dim-grey: var(--p-elev-2);
+  --color-slate-shadow: var(--p-slate);
+  --color-charcoal: var(--p-snow-white);
+  --color-iris-blue: var(--p-snow-white);
+  --color-sky-blue: var(--p-smoke);
+  --color-blurple: var(--p-dusk-violet);
+  --color-dark-blurple: #574fd6;
+  --color-hover-blurple: #8b84f5;
+  --color-spring-green: var(--p-bone);
+  --color-fuchsia: var(--p-ash);
+  --color-vivid-cerulean: var(--p-smoke);
+  --color-ember-orange: var(--p-ash);
+  --color-ekko-red: var(--p-hairline);
+
+  /* Washes: monochrome elevations */
+  --color-lavender-wash: var(--p-elev-2);
+  --color-mint-wash: var(--p-elev-1);
+  --color-powder-blue: var(--p-elev-1);
+  --color-solar-wash: var(--p-elev-2);
+  --color-violet-wash: var(--p-elev-2);
+  --color-aqua-wash: var(--p-elev-1);
+  --color-peach-wash: var(--p-elev-2);
+
+  /* Severity dots */
+  --color-severity-p0: var(--p-snow-white);
+  --color-severity-p1: var(--p-smoke);
+  --color-severity-p2: var(--p-slate);
+}
+
+@theme {
+  /* Fonts */
+  --font-sans: "DM Sans Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-geist: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-nord: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
+
+  /* Type scale */
+  --text-caption: 13px;
+  --text-caption--line-height: 1.5;
+  --text-caption--letter-spacing: 0.33px;
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 1.5;
+  --text-body: 16px;
+  --text-body--line-height: 1.5;
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 1.5;
+  --text-subheading: 18px;
+  --text-subheading--line-height: 1.5;
+  --text-heading-sm: 24px;
+  --text-heading-sm--line-height: 1.33;
+  --text-heading: 36px;
+  --text-heading--line-height: 1.11;
+  --text-heading-lg: 48px;
+  --text-heading-lg--line-height: 1;
+  --text-heading-lg--letter-spacing: -1.68px;
+  --text-display-sm: 56px;
+  --text-display-sm--line-height: 1;
+  --text-display-sm--letter-spacing: -1.96px;
+  --text-display: 72px;
+  --text-display--line-height: 1;
+  --text-display--letter-spacing: -2.52px;
+  --text-hero: 72px;
+  --text-hero--line-height: 1;
+  --text-hero--letter-spacing: -2.52px;
+
+  /* Spacing: 4px base */
+  --spacing: 4px;
+
+  /* Radius */
+  --radius-icons: 4px;
+  --radius-ui: 10px;
+  --radius-input: 10px;
+  --radius-card-sm: 10px;
+  --radius-card: 24px;
+  --radius-largecard: 40px;
+  --radius-image: 40px;
+  --radius-panel: 42px;
+  --radius-frame: 42px;
+  --radius-nav: 19px;
+  --radius-tag: 9999px;
+  --radius-pill: 9999px;
+  --radius-button: 9999px;
+
+  /* Shadows: hairline insets only */
+  --shadow-subtle: inset 0 0 0 1px var(--hairline-color);
+  --shadow-button: inset 0 0 0 1px var(--hairline-color);
+  --shadow-decorative: inset 0 0 0 1px var(--hairline-color);
+
+  /* Layout */
+  --container-page: 1200px;
+
+  /* Glow animations replace gradient fills */
+  --animate-glow-pulse: glow-pulse 5.5s ease-in-out infinite;
+  --animate-glow-drift: glow-drift 14s ease-in-out infinite;
+  --animate-marquee: marquee 28s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 34s linear infinite;
+
+  @keyframes glow-pulse {
+    0%,
+    100% {
+      opacity: 0.42;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.85;
+      transform: scale(1.08);
+    }
+  }
+
+  @keyframes glow-drift {
+    0%,
+    100% {
+      transform: translate3d(-4%, 0, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(4%, -6%, 0) scale(1.1);
+    }
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes marquee-reverse {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+}
+
+/* shadcn primitives mapped onto the same tokens */
+:root {
+  --radius: 24px;
+  --background: var(--p-void-canvas);
+  --foreground: var(--p-bone);
+  --card: var(--p-graphite-surface);
+  --card-foreground: var(--p-bone);
+  --popover: var(--p-graphite-surface);
+  --popover-foreground: var(--p-bone);
+  --primary: var(--p-snow-white);
+  --primary-foreground: var(--p-graphite-surface);
+  --secondary: var(--p-elev-3);
+  --secondary-foreground: var(--p-bone);
+  --muted: var(--p-elev-1);
+  --muted-foreground: var(--p-slate);
+  --accent: var(--p-elev-3);
+  --accent-foreground: var(--p-snow-white);
+  --destructive: var(--p-hairline);
+  --destructive-foreground: var(--p-ink-black);
+  --border: var(--hairline-color);
+  --input: var(--hairline-color);
+  --ring: var(--p-dusk-violet);
+  --sidebar: var(--p-void-canvas);
+  --sidebar-foreground: var(--p-bone);
+  --sidebar-primary: var(--p-snow-white);
+  --sidebar-primary-foreground: var(--p-graphite-surface);
+  --sidebar-accent: var(--p-elev-3);
+  --sidebar-accent-foreground: var(--p-snow-white);
+  --sidebar-border: var(--hairline-color);
+  --sidebar-ring: var(--p-dusk-violet);
+}
+
+@theme inline {
+  --radius-sm: var(--radius-ui);
+  --radius-md: var(--radius-ui);
+  --radius-lg: var(--radius-card);
+  --radius-xl: var(--radius-largecard);
+  --radius-2xl: var(--radius-panel);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/* Frosted translucent panel: the signature surface */
+@utility frost {
+  background: var(--frost-fill);
+  backdrop-filter: blur(14px);
+  box-shadow: inset 0 0 0 1px var(--frost-ring);
+}
+
+@utility frost-strong {
+  background: var(--frost-fill-strong);
+  backdrop-filter: blur(18px);
+  box-shadow: inset 0 0 0 1px var(--frost-ring);
+}
+
+@utility hairline {
+  box-shadow: inset 0 0 0 1px var(--hairline-color);
+}
+
+/* Radial glow orbs: the only decorative light source. No gradient fills. */
+@utility glow-violet {
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, var(--p-dusk-violet) 62%, transparent),
+    transparent
+  );
+  filter: blur(60px);
+}
+
+@utility glow-amber {
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, #ff9d5c 55%, transparent),
+    transparent
+  );
+  filter: blur(70px);
+}
+
+@utility glow-azure {
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklab, #4d7cff 55%, transparent),
+    transparent
+  );
+  filter: blur(70px);
+}
+
+@utility accent-outline {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--p-graphite-surface), var(--p-graphite-surface)) padding-box,
+    linear-gradient(
+        90deg,
+        var(--hairline-color),
+        color-mix(in oklab, var(--p-dusk-violet) 55%, transparent),
+        var(--hairline-color)
+      )
+      border-box;
+}
+
+@utility iris-frame {
+  border: 1px solid transparent;
+  border-radius: var(--radius-frame);
+  background:
+    linear-gradient(var(--p-void-canvas), var(--p-void-canvas)) padding-box,
+    linear-gradient(
+        90deg,
+        var(--hairline-color),
+        color-mix(in oklab, var(--p-dusk-violet) 55%, transparent),
+        var(--hairline-color)
+      )
+      border-box;
+}
+
+/* Legacy wash utilities now resolve to flat elevations */
+@utility wash-solar {
+  background: var(--p-elev-2);
+}
+
+@utility wash-violet {
+  background: var(--p-elev-2);
+}
+
+@utility wash-aqua {
+  background: var(--p-elev-1);
+}
+
+@utility wash-peach {
+  background: var(--p-elev-2);
+}
+
+@utility dusk-wash {
+  background: var(--p-elev-2);
+}
+
+@utility hero-wash {
+  background: transparent;
+}
+
+@utility accordion-grid {
+  display: grid;
+  transition: grid-template-rows 0.65s ease;
+}
+
+@layer base {
+  * {
+    border-color: var(--hairline-color);
+  }
+
+  html,
+  body {
+    background-color: var(--p-void-canvas);
+    color: var(--p-bone);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    color: var(--p-snow-white);
+  }
+
+  strong,
+  b {
+    font-weight: 500;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--p-dusk-violet) 45%, transparent);
+    color: var(--p-snow-white);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+}
+
+/* Accessibility: one visible keyboard focus treatment for every control. */
+@layer base {
+  :where(a, button, [role="button"], input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--p-dusk-violet);
+    outline-offset: 2px;
+    border-radius: inherit;
+  }
+
+  :where(button, [role="button"], a):disabled,
+  [aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+}

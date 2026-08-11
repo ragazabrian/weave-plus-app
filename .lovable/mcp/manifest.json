@@ -1,0 +1,146 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.2",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://qubgdvckystisfeqjdpm.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "weave",
+      "version": "0.1.0",
+      "title": "weave+"
+    },
+    "tools": [
+      {
+        "name": "search_notes",
+        "title": "Search notes",
+        "description": "Search the signed-in user's weave+ notes by title, body text, or tag. Returns matching notes with tags and last-updated time.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Text or tag to search for."
+            },
+            "limit": {
+              "default": 10,
+              "description": "Max results.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          },
+          "required": [
+            "query"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_note",
+        "title": "Create note",
+        "description": "Create a new note in the signed-in user's weave+ workspace. Hashtags in the body are captured as tags.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Note title."
+            },
+            "content": {
+              "default": "",
+              "description": "Markdown body of the note.",
+              "type": "string"
+            },
+            "tags": {
+              "default": [],
+              "description": "Extra tags to attach.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "title"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_courses",
+        "title": "List courses",
+        "description": "List the weave+ courses visible to the signed-in user, with code, title, category and schedule.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "default": 25,
+              "description": "Max courses to return.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_upcoming_assignments",
+        "title": "List upcoming assignments",
+        "description": "List weave+ assignments that are due soon, with course code, due date and points.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "days": {
+              "default": 30,
+              "description": "Look-ahead window in days.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 180
+            },
+            "limit": {
+              "default": 25,
+              "description": "Max assignments to return.",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          }
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

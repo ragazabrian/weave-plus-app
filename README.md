@@ -2,84 +2,73 @@
 
 A team knowledge base + course platform: a collaborative, linked-notes workspace (Obsidian-style) combined with a lightweight course/LMS layer, plus an AI agent that can read and act across a user's notes and courses. Three roles — Admin, Lecturer, Student — share the same route tree, with each URL rendering differently by role.
 
-[**View the source**](https://github.com/ragazabrian/weave-plus-app) · [**Read the build prompt**](PROMPT.md) · Live link: coming soon on Render
+[**View the source**](https://github.com/ragazabrian/weave-plus-app) · [**Read the build prompt**](PROMPT.md) · Live link: coming soon
 
 ## What it does
 
-- **Dashboard** — an agent-curated priority feed plus role-aware stats and recent activity, not a plain due-date sort.
-- **Notes** — a linked-notes vault with tags, backlinks, and version history (graph view is a placeholder for now).
-- **Courses** — course home, announcements, modules (as an expandable accordion), assignments/submissions, and progress/gradebook, all scoped by role.
-- **Canvas** — a list of collaborative whiteboards (the live multiplayer surface itself is a placeholder for now).
-- **Calendar / Inbox** — merged deadlines and message threads, kept quiet and information-dense.
-- **Agent** — a chat panel scoped to what the signed-in role can access, plus an activity log for Admin/Lecturer.
-- **Members / Settings** — workspace roster and configuration, scoped by role (absent entirely for Students).
+- **Dashboard** — an agent-curated priority feed plus role-aware stats and recent activity.
+- **Notes** — a linked-notes vault with tags, backlinks, version history, and a graph view.
+- **Courses** — course home, announcements, modules, assignments/submissions, quizzes, discussions, rubrics, and a gradebook, all scoped by role.
+- **Canvas** — a real multiplayer whiteboard (tldraw).
+- **Calendar / Inbox / Meetings** — merged deadlines, message threads, and scheduled meetings.
+- **Agent** — a chat panel that can search and act on the signed-in user's notes and courses, plus an activity log.
+- **Members / Settings** — workspace roster and configuration, scoped by role.
 
-This build is UI-first: every screen runs on realistic mock data with a role switcher in the sidebar (no backend wiring yet — see "What's not wired up yet" below).
-
-## Design system
-
-Built against a fixed token set: a pale sky-blue canvas, near-black filled buttons as the only dense visual weight, rounded shapes throughout (16px minimum radius), and pastel washes (lavender, mint, powder, solar) reserved for category variety. No box-shadow on content cards — depth comes only from the canvas-to-card color shift. Full token values live in `app/globals.css`, wired into Tailwind v4's `@theme`.
-
-The type scale calls for **Aeonik** (headings) and **Geist** (body/UI). Geist loads via `next/font/google`; Aeonik has no freely licensed source, so it falls back to Geist/system-ui until a licensed font file is added.
+Real accounts (Auth0/Google OAuth), a real Postgres database (Supabase), and a real AI backend — this is a working product, not a mock.
 
 ## How it is made
 
-Next.js 16 (App Router, TypeScript), Tailwind CSS v4. Role-based rendering is driven by a client-side `RoleProvider` (no auth yet — see below). All content comes from `lib/mock-data.ts`.
-
-## What's not wired up yet
-
-This is the UI/design pass. Not yet implemented:
-- Real auth (Supabase Auth / Clerk) — role is a local dev switcher, not a real session.
-- A real database (Supabase/Neon + pgvector).
-- Real-time collaborative editing (Tiptap + Yjs/Hocuspocus) and the live multiplayer whiteboard (tldraw).
-- A real AI agent backed by the Claude API.
+[TanStack Start](https://tanstack.com/start) (React, full-stack, SSR) + TypeScript + Tailwind CSS v4, on top of Supabase (Postgres, auth, storage) and an OpenAI-compatible AI SDK for the agent layer. Originally built with [Lovable](https://lovable.dev); `AGENTS.md` documents the git-history constraint that comes with staying connected to it.
 
 ## Run locally
 
-Requires [Node.js](https://nodejs.org) 20+.
+Requires Node.js and npm.
 
-```bash
+```sh
+git clone https://github.com/ragazabrian/weave-plus-app.git
+cd weave-plus-app
 npm install
 npm run dev
 ```
 
-Then visit [http://localhost:3000](http://localhost:3000).
+## Running this repo on your own infrastructure
+
+Every integration talks to the provider directly using standard credentials, so
+nothing here depends on a Lovable-hosted service. Copy `.env.example` to `.env`
+and fill in what you use:
+
+| Feature | Variables | Notes |
+| --- | --- | --- |
+| Database and auth | `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SERVICE_ROLE_KEY` | Any Supabase project; migrations live in `supabase/migrations` (`supabase link` + `supabase db push`). |
+| Agent and priority feed | `AI_API_KEY`, `AI_BASE_URL`, `AI_MODEL` | Any OpenAI compatible endpoint (OpenAI, OpenRouter, Azure, self hosted). |
+| Onboarding log to Google Sheets | `GOOGLE_SERVICE_ACCOUNT_JSON` (or `GOOGLE_SERVICE_ACCOUNT_EMAIL` + `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY`), `GOOGLE_SHEETS_SPREADSHEET_ID` | Enable the Sheets API, then share the sheet with the service account as an Editor. |
+| Per user Google connections | `GOOGLE_OAUTH_CLIENT_ID`, `GOOGLE_OAUTH_CLIENT_SECRET`, `APP_USER_CONNECTION_KEY_SECRET` | Register `https://your-domain/oauth/google/return` as an authorized redirect URI. Refresh tokens are stored encrypted. |
+
+`.env` is git-ignored — never commit real credentials.
 
 ## Deploy
 
-The repo includes a `render.yaml` blueprint for [Render](https://render.com):
-
-1. Push changes to `main`.
-2. On Render, create a new **Blueprint** deploy from this repository — it picks up `render.yaml` automatically (Node runtime, `npm run build` / `npm start`).
+The default production build targets Cloudflare Workers (Nitro's `cloudflare-module` preset, wired via `@lovable.dev/vite-tanstack-config`) — that's the toolchain this app was built for, and the one that's actually verified working. A Node-server build was tried for Render and hit an upstream bundling bug in this Vite 8 / Nitro 3 beta combination (a `createCsrfMiddleware` import breaks under Node-target chunking but not under the Cloudflare target), so hosting here means Cloudflare Pages/Workers rather than a plain Node host.
 
 ## Project structure
 
 ```text
 weave+ app/
-├── app/
-│   ├── layout.tsx
-│   ├── globals.css
-│   ├── page.tsx                  # redirects to /dashboard
-│   └── (app)/
-│       ├── layout.tsx            # sidebar + shell
-│       ├── dashboard/
-│       ├── notes/[id]/, graph/, tags/
-│       ├── courses/[id]/, [id]/settings/
-│       ├── canvas/[id]/
-│       ├── calendar/
-│       ├── inbox/
-│       ├── agent/
-│       ├── members/
-│       └── settings/
-├── components/
-│   ├── ui/                       # Card, Button, PillTag, Accordion, ...
-│   ├── layout/Sidebar.tsx
-│   └── course/CourseDetail.tsx
-├── lib/
-│   ├── types.ts
-│   ├── mock-data.ts
-│   └── role-context.tsx
-└── render.yaml
+├── src/
+│   ├── routes/                   # TanStack Router file-based routes
+│   │   ├── _authenticated/       # dashboard, courses, notes, canvas, agent, ...
+│   │   ├── auth.tsx
+│   │   └── onboarding.tsx
+│   ├── components/                # dashboard-view, app-shell, agent-chat, canvas-board, ui/
+│   ├── integrations/supabase/
+│   ├── server/                    # Google OAuth, connection-key crypto
+│   ├── server.ts                  # SSR entry (fetch handler)
+│   └── start.ts                   # CSRF + auth middleware
+├── supabase/
+│   ├── config.toml
+│   └── migrations/
+├── PROMPT.md                      # original design/build spec
+└── vite.config.ts
 ```
 
 ## License
