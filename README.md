@@ -2,7 +2,7 @@
 
 A team knowledge base + course platform: a collaborative, linked-notes workspace (Obsidian-style) combined with a lightweight course/LMS layer, plus an AI agent that can read and act across a user's notes and courses. Three roles — Admin, Lecturer, Student — share the same route tree, with each URL rendering differently by role.
 
-[**View the source**](https://github.com/ragazabrian/weave-plus-app) · [**Read the build prompt**](PROMPT.md) · Live link: coming soon
+[**View the source**](https://github.com/ragazabrian/weave-plus-app) · [**Read the build prompt**](PROMPT.md) · [**Live**](https://weave-plus-app.vercel.app)
 
 ## What it does
 
@@ -48,11 +48,16 @@ and fill in what you use:
 
 ## Deploy
 
-Live at https://ragazabrian-weave-plus-app.ragazabrian-8fa.workers.dev, deployed to Cloudflare Workers (Nitro's `cloudflare-module` preset, wired via `@lovable.dev/vite-tanstack-config`) via `wrangler deploy`.
+Live at https://weave-plus-app.vercel.app, deployed to Vercel (Nitro's `vercel` preset, `.vercel/output` Build Output API) via `vercel --prebuilt`. The project is linked to this GitHub repo, so Vercel's own Git integration can also build and deploy pushes directly.
 
-This pins `vite` to `7.3.6` rather than the `^8` the export shipped with. Vite 8 production builds (both the Cloudflare and a Node-server target) hit a real bug: two generated SSR chunks import from each other, and `createCsrfMiddleware` comes back `undefined` across that circular boundary — `npm run dev` was unaffected since dev mode doesn't go through this bundling path. None of this project's declared dependencies (`@tanstack/react-start`, `@tailwindcss/vite`) list Vite 8 as supported yet, so 7.x is the correct fix, not a workaround.
+Two toolchain fixes were needed to get a working production build, independent of which host you target:
 
-Required secrets are set directly on the Worker (`wrangler secret put`), not in this repo: `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`. The AI agent and Google integrations need their own vars added the same way before those features work — see the table above.
+- **`vite` is pinned to `7.3.6`**, not the `^8` the export shipped with. Vite 8 production builds crash every request: two generated SSR chunks import from each other, and `createCsrfMiddleware` comes back `undefined` across that circular boundary. `npm run dev` is unaffected since dev mode doesn't go through this bundling path, and no dependency here (`@tanstack/react-start`, `@tailwindcss/vite`) declares Vite 8 support yet.
+- **`cloudflare:workers` is externalized** in `vite.config.ts` — `@lovable.dev/mcp-js` has a Cloudflare-only code path that Rollup can't resolve when targeting a non-Cloudflare preset (dead code off that platform).
+
+An earlier deploy also exists on Cloudflare Workers at https://ragazabrian-weave-plus-app.ragazabrian-8fa.workers.dev (set `nitro.preset` back to `cloudflare-module` to rebuild for that target).
+
+Required secrets are set directly on the hosting platform (`vercel env add` / `wrangler secret put`), not in this repo: `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`. The AI agent and Google integrations need their own vars added the same way before those features work — see the table above.
 
 ## Project structure
 

@@ -13,7 +13,17 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Overrides the cloudflare-module default — this app deploys to Vercel for its free
+  // *.vercel.app subdomain.
+  nitro: {
+    preset: "vercel",
+  },
   vite: {
     plugins: [mcpPlugin()],
+    build: {
+      // @lovable.dev/mcp-js has a Cloudflare-only code path (dead code off that platform) that
+      // Rollup can't resolve when targeting a non-Cloudflare preset.
+      rollupOptions: { external: ["cloudflare:workers"] },
+    },
   },
 });
