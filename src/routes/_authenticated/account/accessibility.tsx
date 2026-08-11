@@ -60,7 +60,7 @@ function AccessibilityPage() {
           return (
             <div
               key={toggle.key}
-              className="grid items-center gap-3 rounded-card-sm bg-muted p-4 hairline sm:grid-cols-[minmax(0,1fr)_auto]"
+              className="grid grid-cols-1 items-center gap-3 rounded-card-sm bg-muted p-4 hairline sm:grid-cols-[minmax(0,1fr)_auto]"
             >
               <div className="min-w-0">
                 <p className="text-body-sm font-medium text-snow-white">{toggle.label}</p>

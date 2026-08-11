@@ -267,7 +267,7 @@ export function BuiltForSection() {
           Built for what you&apos;re building
         </h2>
 
-        <div className="mt-12 grid gap-8 lg:grid-cols-[240px_1fr]">
+        <div className="mt-12 grid grid-cols-1 gap-8 lg:grid-cols-[240px_1fr]">
           {/* Vertical tabs */}
           <div className="flex flex-row gap-2 overflow-x-auto lg:flex-col lg:gap-0">
             {BUILT_FOR_TABS.map((tab) => (

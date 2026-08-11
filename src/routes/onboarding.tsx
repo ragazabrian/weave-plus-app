@@ -282,7 +282,7 @@ function Onboarding() {
             </p>
 
             <form onSubmit={handleSubmit} className="mt-7 rounded-card p-6 frost sm:p-7">
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Field
                   label="First name"
                   required

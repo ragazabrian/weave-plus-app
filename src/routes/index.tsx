@@ -354,7 +354,7 @@ function DashboardMockup() {
         </span>
       </div>
 
-      <div className="grid sm:grid-cols-[168px_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 sm:grid-cols-[168px_minmax(0,1fr)]">
         <div className="hidden flex-col gap-0.5 border-r border-border p-3 sm:flex">
           <p className="px-2 pb-2 font-display text-body-sm font-medium text-snow-white">weave+</p>
           {rail.map((item) => (
@@ -404,7 +404,7 @@ function DashboardMockup() {
             ))}
           </div>
 
-          <div className="mt-3 grid gap-2 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+          <div className="mt-3 grid grid-cols-1 gap-2 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
             <div className="relative overflow-hidden rounded-card-sm p-4 hairline">
               <div
                 aria-hidden
@@ -1127,7 +1127,7 @@ function Landing() {
 
         {/* FAQ */}
         <section id="faq" className="mx-auto w-full max-w-[1200px] px-4 pb-20 sm:px-6 sm:pb-24">
-          <div className="grid gap-8 lg:grid-cols-[360px_1fr] lg:gap-12">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[360px_1fr] lg:gap-12">
             <div>
               <p className="text-caption font-medium uppercase tracking-[0.18em] text-slate">FAQ</p>
               <h2 className="mt-4 font-display text-heading font-medium tracking-[-0.02em] text-snow-white">
@@ -1271,7 +1271,7 @@ function Landing() {
 
       <footer className="px-4 pb-8 sm:px-6">
         <div className="mx-auto w-full max-w-[1200px] overflow-hidden rounded-card bg-graphite-surface hairline">
-          <div className="grid gap-10 p-8 sm:p-10 lg:grid-cols-[1.4fr_2fr]">
+          <div className="grid grid-cols-1 gap-10 p-8 sm:p-10 lg:grid-cols-[1.4fr_2fr]">
             <div className="min-w-0">
               <Logo size="lg" />
               <p className="mt-4 max-w-xs text-body-sm text-ash">

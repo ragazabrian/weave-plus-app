@@ -47,7 +47,7 @@ function Frame({
 export function VaultMock() {
   return (
     <Frame crumb="weave+ / notes">
-      <div className="grid sm:grid-cols-[124px_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 sm:grid-cols-[124px_minmax(0,1fr)]">
         <div className="hidden flex-col gap-0.5 border-r border-border p-2.5 sm:flex">
           {["All notes", "Modules", "Seminar", "Reading"].map((folder, i) => (
             <span

@@ -122,7 +122,7 @@ function CourseHome() {
   ];
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
       <div className="min-w-0">
         <div className="mb-10 grid gap-4 sm:grid-cols-3">
           <StatBlock label="Modules" value={d?.modules.length ?? 0} />

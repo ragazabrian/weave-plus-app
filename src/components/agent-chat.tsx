@@ -138,7 +138,7 @@ export function AgentWorkspace({
   const transcript = messages.data ?? [];
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[248px_minmax(0,1fr)]">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[248px_minmax(0,1fr)]">
       {/* History */}
       <aside className="h-max rounded-card p-3 frost lg:sticky lg:top-6">
         <Link

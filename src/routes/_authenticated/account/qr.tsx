@@ -51,7 +51,7 @@ function QrPage() {
         title="QR for Mobile Login"
         description="Point your phone camera at the code. It opens the weave+ sign in screen, then your session continues on mobile."
       />
-      <div className="grid gap-4 lg:grid-cols-[320px_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[320px_minmax(0,1fr)]">
         <Card className="flex flex-col items-center gap-4">
           {dataUrl ? (
             <img

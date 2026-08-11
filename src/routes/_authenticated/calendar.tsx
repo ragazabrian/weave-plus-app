@@ -378,7 +378,7 @@ function CalendarPage() {
       ) : view === "timeline" ? (
         <TimelineView cursor={cursor} courses={courses} items={scheduled} colourOf={colourOf} />
       ) : (
-        <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1fr)_300px]">
           <section className="overflow-hidden rounded-card p-3 frost sm:p-4">
             <div
               className="grid gap-1"

@@ -59,7 +59,7 @@ function ProfilePage() {
         title="Profile"
         description="How your name and picture appear across courses, discussions and the inbox."
       />
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px]">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_300px]">
         <Card>
           <form
             className="flex flex-col gap-5"

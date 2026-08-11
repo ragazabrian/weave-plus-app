@@ -107,7 +107,7 @@ function AssignmentDetail() {
     "Student";
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[1fr_360px]">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_360px]">
       <Card>
         <h1 className="font-display text-heading-sm font-medium text-ink">{a.title}</h1>
         <p className="mt-2 text-body-sm text-fog">

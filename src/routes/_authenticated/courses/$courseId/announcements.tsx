@@ -62,7 +62,7 @@ function Announcements() {
   }
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[1fr_340px]">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_340px]">
       <section>
         <SectionHeader title="Announcements" />
         <div className="flex flex-col gap-3">

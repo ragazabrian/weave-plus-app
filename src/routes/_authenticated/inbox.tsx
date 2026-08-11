@@ -201,7 +201,7 @@ function InboxPage() {
 
   return (
     <div>
-      <div className="grid gap-4 lg:grid-cols-[210px_300px_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[210px_300px_minmax(0,1fr)]">
         {/* Rail */}
         <aside
           className={cn(

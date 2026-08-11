@@ -123,7 +123,7 @@ function Members() {
           <p className="mt-1 text-body-sm text-fog">
             They get an email invite. Their role and course access apply the moment they sign in.
           </p>
-          <div className="mt-4 grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
             <input
               type="email"
               value={email}
