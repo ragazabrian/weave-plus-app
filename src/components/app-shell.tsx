@@ -31,6 +31,8 @@ import {
   Megaphone01Icon,
   AccessibilityIcon,
   Video01Icon,
+  ListTreeIcon,
+  HierarchyIcon,
 } from "@hugeicons/core-free-icons";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile, useRole, useSession, displayName, type AppRole } from "@/lib/session";
@@ -59,13 +61,15 @@ const NAV = [
   { to: "/courses", label: "Courses", icon: TeachingIcon, staffOnly: false },
   { to: "/calendar", label: "Calendar", icon: Calendar03Icon, staffOnly: false },
   { to: "/meetings", label: "Meetings", icon: Video01Icon, staffOnly: false },
-  { to: "/inbox", label: "Inbox", icon: Mail01Icon, staffOnly: false, pro: true },
+  { to: "/inbox", label: "Chat", icon: Mail01Icon, staffOnly: false, pro: true },
 
   { to: "/history", label: "History", icon: Clock01Icon, staffOnly: false, pro: true },
   { to: "/agent", label: "Agent", icon: SparklesIcon, staffOnly: false, pro: true },
   { to: "/plugins", label: "Integrations", icon: PlugSocketIcon, staffOnly: false },
   { to: "/help", label: "Help", icon: HelpCircleIcon, staffOnly: false },
   { to: "/members", label: "Members", icon: UserGroupIcon, staffOnly: true },
+  { to: "/directory", label: "Directory", icon: ListTreeIcon, staffOnly: true },
+  { to: "/orgchart", label: "Org chart", icon: HierarchyIcon, staffOnly: true },
   { to: "/settings", label: "Settings", icon: Settings01Icon, staffOnly: true },
 ] as const;
 

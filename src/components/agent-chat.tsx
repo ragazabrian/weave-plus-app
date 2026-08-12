@@ -13,10 +13,33 @@ import {
 } from "@hugeicons/core-free-icons";
 import { supabase } from "@/integrations/supabase/client";
 import { askAgent } from "@/lib/agent.functions";
+import { DEFAULT_EFFORT, DEFAULT_MODEL_ID, findModel, type AiEffort } from "@/lib/ai-models";
+import { ModelMenu } from "@/components/model-menu";
+import { createLocalStore } from "@/lib/local-store";
 import { useRole, useSession } from "@/lib/session";
 import { cn } from "@/lib/utils";
 import { FixedComposer } from "@/components/fixed-composer";
 import { HeroBanner, StatTile, StatTileRow } from "@/components/sections";
+
+type ModelChoice = { modelId: string; effort: AiEffort };
+
+const choiceStore = createLocalStore<ModelChoice>(
+  "weave-model-choice",
+  (raw) => {
+    if (!raw) return { modelId: DEFAULT_MODEL_ID, effort: DEFAULT_EFFORT };
+    try {
+      const parsed = JSON.parse(raw) as Partial<ModelChoice>;
+      return {
+        // Ignore ids saved before the built-in catalogue changed.
+        modelId: findModel(parsed.modelId)?.id ?? DEFAULT_MODEL_ID,
+        effort: parsed.effort ?? DEFAULT_EFFORT,
+      };
+    } catch {
+      return { modelId: DEFAULT_MODEL_ID, effort: DEFAULT_EFFORT };
+    }
+  },
+  (value) => JSON.stringify(value),
+);
 
 const SUGGESTIONS = [
   "What should I work on next?",
@@ -43,8 +66,15 @@ export function AgentWorkspace({
   const ask = useServerFn(askAgent);
   const [draft, setDraft] = useState(initialDraft ?? "");
   const [pending, setPending] = useState<string | null>(null);
+  // Chat created inside this mount. Navigating mid-request would unmount the
+  // component and drop the pending answer, so we hold it locally and move the
+  // URL only once the reply has landed.
+  const [localChatId, setLocalChatId] = useState<string | null>(null);
+  const choice = choiceStore.useStore();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
+
+  const activeChatId = chatId ?? localChatId;
 
   const isStaff = role === "admin" || role === "lecturer";
 
@@ -63,13 +93,13 @@ export function AgentWorkspace({
   });
 
   const messages = useQuery({
-    queryKey: ["agent-messages", chatId],
-    enabled: Boolean(chatId),
+    queryKey: ["agent-messages", activeChatId],
+    enabled: Boolean(activeChatId),
     queryFn: async () => {
       const { data, error } = await supabase
         .from("agent_messages")
         .select("id, role, content, created_at")
-        .eq("chat_id", chatId!)
+        .eq("chat_id", activeChatId!)
         .order("created_at");
       if (error) throw error;
       return data ?? [];
@@ -86,11 +116,11 @@ export function AgentWorkspace({
 
   async function send(text?: string) {
     const message = (text ?? draft).trim();
-    if (!message || !user) return;
+    if (!message || pending || !user) return;
     setDraft("");
     setPending(message);
 
-    let activeId = chatId;
+    let activeId = activeChatId;
     try {
       if (!activeId) {
         const { data, error } = await supabase
@@ -100,15 +130,27 @@ export function AgentWorkspace({
           .single();
         if (error || !data) throw new Error("Could not start that chat.");
         activeId = data.id;
-        await queryClient.invalidateQueries({ queryKey: ["agent-chats", user.id] });
-        navigate({ to: "/agent/$chatId", params: { chatId: activeId } });
+        setLocalChatId(activeId);
+        void queryClient.invalidateQueries({ queryKey: ["agent-chats", user.id] });
       }
 
-      await ask({ data: { message, chatId: activeId } });
+      await ask({
+        data: {
+          message,
+          chatId: activeId,
+          modelId: choice.modelId,
+          effort: choice.effort,
+        },
+      });
+
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["agent-messages", activeId] }),
         queryClient.invalidateQueries({ queryKey: ["agent-chats", user.id] }),
       ]);
+
+      if (!chatId) {
+        navigate({ to: "/agent/$chatId", params: { chatId: activeId } });
+      }
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "The agent could not answer.");
     } finally {
@@ -209,7 +251,7 @@ export function AgentWorkspace({
 
       {/* Transcript + sticky composer */}
       <div className="relative min-w-0">
-        <div className="flex flex-col gap-3 pb-40">
+        <div className="flex flex-col gap-3 pb-6 lg:pb-48">
           {transcript.length === 0 && !pending ? (
             <div>
               <HeroBanner
@@ -266,22 +308,23 @@ export function AgentWorkspace({
           <div ref={endRef} />
         </div>
 
-        <div className="mb-3 flex flex-col gap-2">
-          <p className="text-caption uppercase tracking-widest text-slate">Start with a prompt</p>
-          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-thin">
-            {SUGGESTIONS.map((s) => (
-              <button
-                key={s}
-                onClick={() => send(s)}
-                className="shrink-0 rounded-pill bg-muted px-4 py-2 text-left text-body-sm font-medium text-snow-white transition-colors hover:bg-accent"
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-        </div>
-
         <FixedComposer>
+          <div className="mb-2 flex flex-col gap-2">
+            <p className="text-caption uppercase tracking-widest text-slate">Start with a prompt</p>
+            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-thin">
+              {SUGGESTIONS.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => void send(s)}
+                  disabled={Boolean(pending)}
+                  className="shrink-0 rounded-pill bg-muted px-4 py-2 text-left text-body-sm font-medium text-snow-white transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="rounded-card bg-graphite-surface/90 p-3 backdrop-blur-xl hairline">
             <div className="flex items-end gap-2">
               <textarea
@@ -307,6 +350,15 @@ export function AgentWorkspace({
               >
                 <HugeiconsIcon icon={ArrowUp01Icon} size={18} strokeWidth={2} />
               </button>
+            </div>
+            <div className="mt-1 flex items-center justify-between gap-2 border-t border-white/8 pt-2">
+              <ModelMenu
+                modelId={choice.modelId}
+                effort={choice.effort}
+                onSelectModel={(modelId) => choiceStore.set({ ...choice, modelId })}
+                onSelectEffort={(effort) => choiceStore.set({ ...choice, effort })}
+              />
+              <span className="text-caption text-slate">Built in, no setup needed</span>
             </div>
           </div>
         </FixedComposer>

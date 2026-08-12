@@ -11,6 +11,8 @@ export type PriorityItem = {
 const ChatInput = z.object({
   message: z.string().min(1).max(4000),
   chatId: z.string().uuid(),
+  modelId: z.string().max(60).optional(),
+  effort: z.enum(["low", "medium", "high"]).optional(),
 });
 
 /**
@@ -110,10 +112,16 @@ export const getPriorityFeed = createServerFn({ method: "POST" })
           ? "You are advising a lecturer. Prioritise ungraded submissions aged by urgency plus their downstream consequence, and module drop-off anomalies in their courses."
           : "You are advising a student. Prioritise at-risk deadlines and how their pace compares with the cohort completion rates.";
 
-    const { getAiRuntime, AI_SETUP_HINT } = await import("@/lib/ai-provider.server");
-    const ai = getAiRuntime();
-    if (!ai) {
-      return { items: [], error: AI_SETUP_HINT };
+    const { resolveModel, NO_ACCOUNT_HINT, describeAiError } =
+      await import("@/lib/ai-provider.server");
+    const { FEED_MODEL_ID } = await import("@/lib/ai-models");
+    let ai: ReturnType<typeof resolveModel>;
+    try {
+      // Cheap, fast model by default so the feed never costs much.
+      ai = resolveModel({ modelId: FEED_MODEL_ID, effort: "low" });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "";
+      return { items: [], error: message || NO_ACCOUNT_HINT };
     }
 
     try {
@@ -155,28 +163,24 @@ Return between 3 and 5 items, ordered most urgent first. Each item needs a short
       if (NoObjectGeneratedError.isInstance(error)) {
         return { items: [], error: "The agent returned an unreadable answer. Try refreshing." };
       }
-      const message = error instanceof Error ? error.message : "Unknown error";
-      if (message.includes("429")) {
-        return { items: [], error: "AI rate limit reached , try again in a moment." };
-      }
-      if (message.includes("402")) {
-        return { items: [], error: "AI credits exhausted. Add credits to continue." };
-      }
       console.error("priority feed failed", error);
-      return { items: [], error: "Could not generate the priority feed right now." };
+      return { items: [], error: describeAiError(error) };
     }
   });
 
-/** Agent chat, scoped to what the signed-in user can read. */
+/** Agent chat, scoped to what the signed-in user can read. Works with no setup. */
 export const askAgent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => ChatInput.parse(input))
-  .handler(async ({ data, context }): Promise<{ reply: string }> => {
+  .handler(async ({ data, context }): Promise<{ reply: string; modelId: string }> => {
     const { supabase, userId } = context;
 
-    const { getAiRuntime, AI_SETUP_HINT } = await import("@/lib/ai-provider.server");
-    const ai = getAiRuntime();
-    if (!ai) throw new Error(AI_SETUP_HINT);
+    const { resolveModel, buildSystemPrompt, describeAiError } =
+      await import("@/lib/ai-provider.server");
+    const ai = resolveModel({
+      modelId: data.modelId ?? null,
+      effort: data.effort ?? null,
+    });
 
     const [{ data: history }, { data: courses }, { data: assignments }, { data: notes }] =
       await Promise.all([
@@ -202,24 +206,36 @@ export const askAgent = createServerFn({ method: "POST" })
       })),
     };
 
-    const { generateText } = await import("ai");
+    const { streamText } = await import("ai");
 
-    const result = await generateText({
-      model: ai.model,
-      system: `You are the weave+ workspace agent. Answer using only the workspace data provided. Be concise and specific , cite note titles, course codes and dates when relevant. If the data does not contain the answer, say so plainly.
+    let reply: string;
+    try {
+      // Streamed on the wire so long answers never hit a request timeout,
+      // then consumed here because this call returns one final answer.
+      const result = streamText({
+        model: ai.model,
+        system: buildSystemPrompt({
+          identity:
+            "You are the weave+ workspace agent, helping with courses, notes, assignments and deadlines.",
+          context: JSON.stringify(workspace),
+          modelId: ai.modelId,
+          effort: ai.effort,
+        }),
+        messages: [
+          ...(history ?? []).map((m) => ({
+            role: m.role === "assistant" ? ("assistant" as const) : ("user" as const),
+            content: m.content,
+          })),
+          { role: "user" as const, content: data.message },
+        ],
+        providerOptions: ai.providerOptions,
+      });
 
-WORKSPACE DATA:
-${JSON.stringify(workspace)}`,
-      messages: [
-        ...(history ?? []).map((m) => ({
-          role: m.role === "assistant" ? ("assistant" as const) : ("user" as const),
-          content: m.content,
-        })),
-        { role: "user" as const, content: data.message },
-      ],
-    });
-
-    const reply = result.text.trim() || "I could not produce an answer for that.";
+      reply = (await result.text).trim() || "I could not produce an answer for that.";
+    } catch (error) {
+      console.error("agent chat failed", error);
+      throw new Error(describeAiError(error));
+    }
 
     const { error: insertError } = await supabase.from("agent_messages").insert([
       { user_id: userId, role: "user", content: data.message, chat_id: data.chatId },
@@ -227,16 +243,23 @@ ${JSON.stringify(workspace)}`,
     ]);
     if (insertError) console.error("failed to persist agent messages", insertError);
 
-    // Keep the chat list fresh, and title a brand new chat from its first message.
+    // Keep the chat list fresh, remember the model, and title a brand new chat.
     const { data: chatRow } = await supabase
       .from("agent_chats")
       .select("title")
       .eq("id", data.chatId)
       .maybeSingle();
-    await supabase
-      .from("agent_chats")
+    await (
+      supabase.from("agent_chats") as never as {
+        update: (values: Record<string, unknown>) => {
+          eq: (column: string, value: string) => Promise<unknown>;
+        };
+      }
+    )
       .update({
         updated_at: new Date().toISOString(),
+        model_id: ai.modelId,
+        effort: ai.effort,
         ...(chatRow?.title && chatRow.title !== "New chat"
           ? {}
           : { title: data.message.slice(0, 60) }),
@@ -250,5 +273,5 @@ ${JSON.stringify(workspace)}`,
       result: reply.slice(0, 500),
     });
 
-    return { reply };
+    return { reply, modelId: ai.modelId };
   });

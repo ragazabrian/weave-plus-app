@@ -19,11 +19,13 @@ import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedCalendarRouteImport } from './routes/_authenticated/calendar'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedDirectoryRouteImport } from './routes/_authenticated/directory'
 import { Route as AuthenticatedHelpRouteImport } from './routes/_authenticated/help'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
 import { Route as AuthenticatedInboxRouteImport } from './routes/_authenticated/inbox'
 import { Route as AuthenticatedMeetingsRouteImport } from './routes/_authenticated/meetings'
 import { Route as AuthenticatedMembersRouteImport } from './routes/_authenticated/members'
+import { Route as AuthenticatedOrgchartRouteImport } from './routes/_authenticated/orgchart'
 import { Route as AuthenticatedPluginsRouteImport } from './routes/_authenticated/plugins'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedStudentRouteImport } from './routes/_authenticated/student'
@@ -115,6 +117,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedDirectoryRoute = AuthenticatedDirectoryRouteImport.update({
+  id: '/directory',
+  path: '/directory',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedHelpRoute = AuthenticatedHelpRouteImport.update({
   id: '/help',
   path: '/help',
@@ -138,6 +145,11 @@ const AuthenticatedMeetingsRoute = AuthenticatedMeetingsRouteImport.update({
 const AuthenticatedMembersRoute = AuthenticatedMembersRouteImport.update({
   id: '/members',
   path: '/members',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedOrgchartRoute = AuthenticatedOrgchartRouteImport.update({
+  id: '/orgchart',
+  path: '/orgchart',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedPluginsRoute = AuthenticatedPluginsRouteImport.update({
@@ -376,11 +388,13 @@ export interface FileRoutesByFullPath {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/calendar': typeof AuthenticatedCalendarRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/directory': typeof AuthenticatedDirectoryRoute
   '/help': typeof AuthenticatedHelpRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/inbox': typeof AuthenticatedInboxRoute
   '/meetings': typeof AuthenticatedMeetingsRoute
   '/members': typeof AuthenticatedMembersRoute
+  '/orgchart': typeof AuthenticatedOrgchartRoute
   '/plugins': typeof AuthenticatedPluginsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/student': typeof AuthenticatedStudentRoute
@@ -431,11 +445,13 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/calendar': typeof AuthenticatedCalendarRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/directory': typeof AuthenticatedDirectoryRoute
   '/help': typeof AuthenticatedHelpRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/inbox': typeof AuthenticatedInboxRoute
   '/meetings': typeof AuthenticatedMeetingsRoute
   '/members': typeof AuthenticatedMembersRoute
+  '/orgchart': typeof AuthenticatedOrgchartRoute
   '/plugins': typeof AuthenticatedPluginsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/student': typeof AuthenticatedStudentRoute
@@ -487,11 +503,13 @@ export interface FileRoutesById {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/calendar': typeof AuthenticatedCalendarRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/directory': typeof AuthenticatedDirectoryRoute
   '/_authenticated/help': typeof AuthenticatedHelpRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/inbox': typeof AuthenticatedInboxRoute
   '/_authenticated/meetings': typeof AuthenticatedMeetingsRoute
   '/_authenticated/members': typeof AuthenticatedMembersRoute
+  '/_authenticated/orgchart': typeof AuthenticatedOrgchartRoute
   '/_authenticated/plugins': typeof AuthenticatedPluginsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/student': typeof AuthenticatedStudentRoute
@@ -544,11 +562,13 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/calendar'
     | '/dashboard'
+    | '/directory'
     | '/help'
     | '/history'
     | '/inbox'
     | '/meetings'
     | '/members'
+    | '/orgchart'
     | '/plugins'
     | '/settings'
     | '/student'
@@ -599,11 +619,13 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/calendar'
     | '/dashboard'
+    | '/directory'
     | '/help'
     | '/history'
     | '/inbox'
     | '/meetings'
     | '/members'
+    | '/orgchart'
     | '/plugins'
     | '/settings'
     | '/student'
@@ -654,11 +676,13 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/_authenticated/calendar'
     | '/_authenticated/dashboard'
+    | '/_authenticated/directory'
     | '/_authenticated/help'
     | '/_authenticated/history'
     | '/_authenticated/inbox'
     | '/_authenticated/meetings'
     | '/_authenticated/members'
+    | '/_authenticated/orgchart'
     | '/_authenticated/plugins'
     | '/_authenticated/settings'
     | '/_authenticated/student'
@@ -786,6 +810,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/directory': {
+      id: '/_authenticated/directory'
+      path: '/directory'
+      fullPath: '/directory'
+      preLoaderRoute: typeof AuthenticatedDirectoryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/help': {
       id: '/_authenticated/help'
       path: '/help'
@@ -819,6 +850,13 @@ declare module '@tanstack/react-router' {
       path: '/members'
       fullPath: '/members'
       preLoaderRoute: typeof AuthenticatedMembersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/orgchart': {
+      id: '/_authenticated/orgchart'
+      path: '/orgchart'
+      fullPath: '/orgchart'
+      preLoaderRoute: typeof AuthenticatedOrgchartRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/plugins': {
@@ -1154,11 +1192,13 @@ const AuthenticatedCoursesCourseIdRouteRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCalendarRoute: typeof AuthenticatedCalendarRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDirectoryRoute: typeof AuthenticatedDirectoryRoute
   AuthenticatedHelpRoute: typeof AuthenticatedHelpRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedInboxRoute: typeof AuthenticatedInboxRoute
   AuthenticatedMeetingsRoute: typeof AuthenticatedMeetingsRoute
   AuthenticatedMembersRoute: typeof AuthenticatedMembersRoute
+  AuthenticatedOrgchartRoute: typeof AuthenticatedOrgchartRoute
   AuthenticatedPluginsRoute: typeof AuthenticatedPluginsRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
   AuthenticatedStudentRoute: typeof AuthenticatedStudentRoute
@@ -1186,11 +1226,13 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCalendarRoute: AuthenticatedCalendarRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDirectoryRoute: AuthenticatedDirectoryRoute,
   AuthenticatedHelpRoute: AuthenticatedHelpRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedInboxRoute: AuthenticatedInboxRoute,
   AuthenticatedMeetingsRoute: AuthenticatedMeetingsRoute,
   AuthenticatedMembersRoute: AuthenticatedMembersRoute,
+  AuthenticatedOrgchartRoute: AuthenticatedOrgchartRoute,
   AuthenticatedPluginsRoute: AuthenticatedPluginsRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
   AuthenticatedStudentRoute: AuthenticatedStudentRoute,
