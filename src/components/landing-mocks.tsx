@@ -155,7 +155,7 @@ export function CourseMock() {
           ))}
         </div>
 
-        <div className="mt-2.5 grid gap-1.5 sm:grid-cols-2">
+        <div className="mt-2.5 grid grid-cols-1 gap-1.5 sm:grid-cols-2">
           <div className="rounded-card-sm p-2.5 hairline">
             <p className="text-caption uppercase tracking-wide text-slate">Awaiting grading</p>
             <p className="mt-1 font-display text-body-lg font-medium text-snow-white">12</p>

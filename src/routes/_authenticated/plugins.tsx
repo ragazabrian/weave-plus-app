@@ -186,7 +186,7 @@ function IntegrationsPage() {
       {results.length === 0 ? (
         <EmptyState>No integrations match that search.</EmptyState>
       ) : (
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
           {results.map((item) => {
             const connectorId = CONNECTOR_BY_INTEGRATION[item.id];
             const live = connectorId ? stateFor(connectorId) : null;

@@ -57,7 +57,7 @@ function FilesPage() {
       {files.isLoading ? (
         <EmptyState>Loading your files…</EmptyState>
       ) : (
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <Card>
             <h2 className="mb-4 text-body font-medium text-snow-white">Notes ({notes.length})</h2>
             <div className="flex flex-col gap-2">

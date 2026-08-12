@@ -61,7 +61,7 @@ function Progress() {
     return (
       <div>
         <SectionHeader title="My progress" />
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Card dense>
             <p className="text-body-sm text-fog">Modules completed</p>
             <p className="mt-2 font-display text-heading-sm font-medium text-ink">

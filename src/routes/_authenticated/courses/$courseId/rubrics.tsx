@@ -92,7 +92,7 @@ function RubricsPage() {
                 {total > 0 ? Math.round((assignment.points / total) * 100) : 0}% of course
               </Pill>
             </div>
-            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+            <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
               {bands(assignment.points || 100).map((band) => (
                 <div key={band.label} className="rounded-card-sm bg-muted p-4 hairline">
                   <div className="flex items-center justify-between gap-2">

@@ -83,7 +83,7 @@ function PortfolioPage() {
         title="Portfolio"
         description="A living record of graded work and the artefacts you chose to share."
       />
-      <div className="mb-6 grid gap-4 sm:grid-cols-3">
+      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <StatBlock label="Graded pieces" value={graded.length} />
         <StatBlock label="Average score" value={average === null ? "n/a" : `${average}%`} />
         <StatBlock
@@ -95,7 +95,7 @@ function PortfolioPage() {
       {data.isLoading ? (
         <EmptyState>Building your portfolio…</EmptyState>
       ) : (
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <Card>
             <h2 className="mb-4 text-body font-medium text-snow-white">Graded work</h2>
             <div className="flex flex-col gap-2">

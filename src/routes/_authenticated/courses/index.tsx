@@ -144,7 +144,7 @@ function CourseList() {
       {isStaff && open ? (
         <Card className="mb-4" dense>
           <h2 className="text-subheading font-medium text-snow-white">New course</h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <input
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
@@ -186,7 +186,7 @@ function CourseList() {
       ) : (data?.courses.length ?? 0) === 0 ? (
         <EmptyState>No courses are visible to you yet.</EmptyState>
       ) : (
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {data!.courses.map((course) => {
             const moduleCount = data!.modules.filter((m) => m.course_id === course.id).length;
             const courseAssignments = data!.assignments.filter((a) => a.course_id === course.id);

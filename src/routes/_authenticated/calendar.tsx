@@ -335,7 +335,7 @@ function CalendarPage() {
       {data.isLoading ? (
         <EmptyState>Loading your calendar…</EmptyState>
       ) : view === "agenda" ? (
-        <div className="grid gap-3 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
           <section className="rounded-card p-5 frost">
             <h2 className="mb-3 text-body font-medium text-snow-white">Upcoming</h2>
             <div className="flex flex-col gap-2">
@@ -513,7 +513,7 @@ function KanbanView({
   ];
 
   return (
-    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
       {buckets.map((bucket) => {
         const list = items.filter(bucket.test);
         return (

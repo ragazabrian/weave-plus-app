@@ -84,7 +84,7 @@ function CanvasIndex() {
       ) : (canvases.data ?? []).length === 0 ? (
         <EmptyState>No canvases yet.</EmptyState>
       ) : (
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
           {canvases.data!.map((canvas, index) => (
             <Link
               key={canvas.id}

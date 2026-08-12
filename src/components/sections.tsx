@@ -191,7 +191,7 @@ export function PanelItem({
 }
 
 export function StatTileRow({ children }: { children: ReactNode }) {
-  return <div className="mb-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{children}</div>;
+  return <div className="mb-7 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">{children}</div>;
 }
 
 export function StatTile({

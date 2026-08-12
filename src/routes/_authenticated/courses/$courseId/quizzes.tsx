@@ -70,7 +70,7 @@ function QuizzesPage() {
           No quiz drafts yet. Create an assignment with quiz in the title and it appears here.
         </EmptyState>
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {items.map((quiz) => (
             <Card key={quiz.id} dense className="flex h-full flex-col">
               <div className="flex items-start justify-between gap-2">

@@ -389,7 +389,7 @@ function DashboardMockup() {
             </span>
           </div>
 
-          <div className="mt-4 grid gap-2 sm:grid-cols-3">
+          <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
             {[
               { k: "Awaiting grading", v: "12" },
               { k: "Deadlines this week", v: "5" },
@@ -843,7 +843,7 @@ function Landing() {
             links together, stays searchable and survives the term.
           </p>
 
-          <div className="mt-12 grid gap-3 md:grid-cols-3">
+          <div className="mt-12 grid grid-cols-1 gap-3 md:grid-cols-3">
             {CHALLENGE.map((item) => (
               <article
                 key={item.title}
@@ -914,7 +914,7 @@ function Landing() {
             </Link>
           </div>
 
-          <div className="mt-10 grid gap-3 lg:grid-cols-3">
+          <div className="mt-10 grid grid-cols-1 gap-3 lg:grid-cols-3">
             <article className="relative overflow-hidden rounded-card p-6 frost sm:p-7 lg:col-span-2">
               <p className="text-caption uppercase tracking-[0.18em] text-slate">Search</p>
               <h3 className="mt-3 font-display text-heading-sm font-medium text-snow-white">
@@ -1033,7 +1033,7 @@ function Landing() {
             </article>
           </div>
 
-          <div className="mt-3 grid gap-3 md:grid-cols-3">
+          <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-3">
             {FEATURES.map((feature) => (
               <article key={feature.title} className="rounded-card p-6 frost sm:p-7">
                 <HugeiconsIcon
@@ -1063,7 +1063,7 @@ function Landing() {
             Live in an afternoon
           </h2>
 
-          <div className="mt-10 grid gap-3 md:grid-cols-3">
+          <div className="mt-10 grid grid-cols-1 gap-3 md:grid-cols-3">
             {HOW.map((item) => (
               <article
                 key={item.step}
@@ -1082,7 +1082,7 @@ function Landing() {
             <h3 className="text-subheading font-medium text-snow-white">
               One workspace, nine surfaces
             </h3>
-            <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {SURFACES.map((item) => (
                 <div key={item.label} className="rounded-card-sm p-5 hairline">
                   <HugeiconsIcon
@@ -1108,7 +1108,7 @@ function Landing() {
             <h2 className="mt-4 max-w-2xl font-display text-heading font-medium tracking-[-0.02em] text-snow-white">
               Permissions enforced in the database
             </h2>
-            <div className="mt-10 grid gap-3 md:grid-cols-3">
+            <div className="mt-10 grid grid-cols-1 gap-3 md:grid-cols-3">
               {SECURITY.map((item) => (
                 <div key={item.title} className="rounded-card-sm p-5 hairline">
                   <HugeiconsIcon
@@ -1296,7 +1296,7 @@ function Landing() {
               </p>
             </div>
 
-            <div className="grid gap-8 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
               {FOOTER_COLUMNS.map((column) => (
                 <div key={column.title} className="min-w-0">
                   <p className="text-caption font-medium uppercase tracking-[0.16em] text-slate">

@@ -231,7 +231,7 @@ function SettingsPage() {
 
       <SectionHeader title="Shortcuts" />
       <Card className="mb-10">
-        <div className="grid gap-1 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
           {SHORTCUTS.map(([label, keys]) => (
             <div key={label} className="flex items-center justify-between gap-3 py-2.5">
               <span className="flex items-center gap-2 text-body-sm text-bone">

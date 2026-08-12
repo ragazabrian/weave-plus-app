@@ -55,7 +55,7 @@ export function PlatformStats() {
           weave+ is an easy to adopt, adaptable teaching and learning workspace
         </h2>
 
-        <div className="relative mt-16 grid gap-3 text-left sm:grid-cols-3">
+        <div className="relative mt-16 grid grid-cols-1 gap-3 text-left sm:grid-cols-3">
           {stats.map((stat) => (
             <div key={stat.value} className="rounded-card p-6 frost sm:p-8">
               <p className="text-caption font-medium uppercase tracking-[0.18em] text-slate">
@@ -125,7 +125,7 @@ export function PlatformIntegrate() {
 
   return (
     <section className="px-4 pb-24 sm:px-6 sm:pb-32">
-      <div className="mx-auto grid w-full max-w-[1200px] items-center gap-12 lg:grid-cols-2">
+      <div className="mx-auto grid grid-cols-1 w-full max-w-[1200px] items-center gap-12 lg:grid-cols-2">
         <CodeWindow />
 
         <div className="text-center lg:text-left">
@@ -305,7 +305,7 @@ export function BuiltForSection() {
               className="pointer-events-none absolute -bottom-16 right-1/4 h-56 w-56 animate-glow-drift glow-azure opacity-30"
             />
 
-            <div className="relative grid gap-10 lg:grid-cols-2">
+            <div className="relative grid grid-cols-1 gap-10 lg:grid-cols-2">
               <div>
                 <h3 className="font-display text-heading-sm font-medium tracking-[-0.02em] text-snow-white sm:text-heading">
                   {panel.title}
@@ -422,7 +422,7 @@ export function SocialProofSection() {
           You&apos;re in great company
         </h2>
 
-        <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {TESTIMONIAL_CARDS.map((card, index) => {
             const isFeatured = card.featured;
             return (
@@ -548,7 +548,7 @@ export function ContentHubSection() {
           </button>
         </div>
 
-        <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {filtered.map((card) => (
             <article
               key={card.title}

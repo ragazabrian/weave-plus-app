@@ -65,7 +65,7 @@ function EPortfoliosPage() {
       ) : items.length === 0 ? (
         <EmptyState>No legacy collections found on this account.</EmptyState>
       ) : (
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {items.map((item) => (
             <Card key={item.id} dense>
               <div className="flex items-center justify-between gap-2">

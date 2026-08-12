@@ -146,7 +146,7 @@ function HelpPage() {
         description="Search the guides, reach your instructor, or tell us when something breaks."
       />
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card className="lg:col-span-2">
           <h2 className="flex items-center gap-2 text-body font-medium text-snow-white">
             <HugeiconsIcon icon={SearchVisualIcon} size={18} strokeWidth={1.6} />
@@ -158,7 +158,7 @@ function HelpPage() {
             placeholder="Try grades, modules, calendar…"
             className="mt-4 min-h-11 w-full rounded-ui bg-muted px-3 text-body-sm text-snow-white hairline placeholder:text-slate"
           />
-          <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
             {results.length === 0 ? (
               <EmptyState>No guide matches that. Try asking your instructor below.</EmptyState>
             ) : (
@@ -297,7 +297,7 @@ function HelpPage() {
             <HugeiconsIcon icon={Note01Icon} size={18} strokeWidth={1.6} />
             Community and release notes
           </h2>
-          <div className="mt-4 grid gap-2 sm:grid-cols-3">
+          <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-3">
             {COMMUNITY_LINKS.map((link) => (
               <a
                 key={link.label}

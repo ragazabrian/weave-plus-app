@@ -124,7 +124,7 @@ function CourseHome() {
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
       <div className="min-w-0">
-        <div className="mb-10 grid gap-4 sm:grid-cols-3">
+        <div className="mb-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
           <StatBlock label="Modules" value={d?.modules.length ?? 0} />
           <StatBlock
             label={isStaff ? "Enrolled students" : "Modules completed"}
@@ -143,7 +143,7 @@ function CourseHome() {
           />
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <section>
             <SectionHeader
               title="Module sequence"
